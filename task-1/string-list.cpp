@@ -29,19 +29,19 @@ void StringListAdd(char** &list, const char* str){
 
 
 void StringListRemove(char** &list, const char* str){
-    int index = StringListIndexOf(list, str);
-    if(index == -1){
-        return;
+    int i = 0, j = 0;
+    while(list[i] != NULL){
+        if (strcmp(list[i], str) == 0) {
+            free(list[i]);
+        } else {
+            list[j] = list[i];
+            j++;
+        }
+        i++;
     }
-    free(list[index]);
-    for(int i = index; list[i] != NULL; i++){
-        list[i] = list[i + 1];
-    }
-
-    /*int size = StringListSize(list);
-    list = (char**)realloc(list, (size + 1) * sizeof(char*));*/
+    list[j] = NULL;
+    list = (char**)realloc(list, sizeof(char*) * (j + 1));
 }
-
 
 int StringListSize(char** &list){
     int size = 0;

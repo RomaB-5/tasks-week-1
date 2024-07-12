@@ -40,16 +40,42 @@ TEST(StringListRemove, Test1) {
     StringListRemove(list, "apple");
 
     ASSERT_STREQ(list[0],  "plum");
-    ASSERT_STREQ(list[1],  "apple");
-    ASSERT_EQ(list[2], (char*) NULL);
-
-    StringListRemove(list, "apple");
-
-    ASSERT_STREQ(list[0], "plum");
     ASSERT_EQ(list[1], (char*) NULL);
 
     StringListRemove(list, "plum");
     ASSERT_EQ(list[0], (char*) NULL);
+
+    StringListDestroy(list);
+}
+
+TEST(StringListRemove, Test2) {
+    char** list;
+    StringListInit(list);
+
+    StringListAdd(list,  "apple");
+    StringListAdd(list,  "plum");
+    StringListAdd(list,  "apple");
+    StringListAdd(list,  "banana");
+    StringListAdd(list,  "apple");
+    StringListAdd(list,  "plum");
+
+    StringListRemove(list, "plum");
+
+    ASSERT_STREQ(list[0],  "apple");
+    ASSERT_STREQ(list[1],  "apple");
+    ASSERT_STREQ(list[2],  "banana");
+    ASSERT_STREQ(list[3],  "apple");
+    ASSERT_EQ(list[4], (char*) NULL);
+
+    StringListRemove(list, "apple");
+
+    ASSERT_STREQ(list[0],  "banana");
+    ASSERT_EQ(list[1], (char*) NULL);
+
+    StringListRemove(list, "banana");
+    ASSERT_EQ(list[0], (char*) NULL);
+
+    StringListDestroy(list);
 }
 
 TEST(StringListDestroy, Test1) {

@@ -27,7 +27,7 @@ void StringListAdd(char** &list, const char* str);
 
 /**
  * void StringListRemove(char** list, String str)
- * Removes the first occurrence of the string from the list.
+ * Removes all occurances of str in the list
  */
 void StringListRemove(char** &list, const char* str);
 
