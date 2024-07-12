@@ -66,17 +66,21 @@ void StringListRemoveDuplicates(char** &list){
     int size = StringListSize(list);
     
     for (int i = 0; i < size; i++){
-        for (int j = i + 1; j < size; j++){
-            if (strcmp(list[i], list[j]) == 0) {
+        int j = i + 1, k = i + 1;
+        while (list[j] != NULL){
+            if (strcmp(list[i], list[j]) == 0){
                 free(list[j]);
-                for (int k = j; k < size - 1; k++){
-                    list[k] = list[k+1];
-                }
                 size--;
-                j--;
+            } else {
+                list[k] = list[j];
+                k++;
             }
+            j++;
         }
+        list[size] = NULL;
     }
+
+
 
     list = (char**) realloc(list, (size + 1) * sizeof(char*));
     list[size] = NULL;
@@ -100,16 +104,13 @@ void StringListReplaceInStrings(char** &list, const char* before, const char* af
     }
 }
 
+int cmp(const void* s1, const void* s2)
+{
+    const char** a = (const char**) s1;
+    const char** b = (const char**) s2;
+    return strcmp(*a, *b);
+}
 
 void StringListSort(char** &list){
-    int size = StringListSize(list);
-    for(int i = 0; i < size; i++){
-        for(int j = i + 1; j < size; j++){
-            if(strcmp(list[i], list[j]) > 0){
-                char* temp = list[i];
-                list[i] = list[j];
-                list[j] = temp;
-            }
-        }
-    }
+    qsort(list, StringListSize(list), sizeof(char*), cmp);
 }

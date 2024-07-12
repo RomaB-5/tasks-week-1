@@ -165,6 +165,7 @@ TEST(StringListSort, Test1) {
     char** list;
     StringListInit(list);
 
+    StringListAdd(list,  "apricot");
     StringListAdd(list,  "apple");
     StringListAdd(list,  "plum");
     StringListAdd(list,  "banana");
@@ -172,9 +173,10 @@ TEST(StringListSort, Test1) {
     StringListSort(list);
 
     ASSERT_STREQ(list[0], "apple");
-    ASSERT_STREQ(list[1], "banana");
-    ASSERT_STREQ(list[2], "plum");
-    ASSERT_EQ(list[3], (char*) NULL);
+    ASSERT_STREQ(list[1], "apricot");
+    ASSERT_STREQ(list[2], "banana");
+    ASSERT_STREQ(list[3], "plum");
+    ASSERT_EQ(list[4], (char*) NULL);
 
     StringListDestroy(list);
 }
