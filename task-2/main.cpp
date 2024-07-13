@@ -10,9 +10,9 @@ int main() {
     AnyType f((unsigned char) 'a');
     AnyType g((short int) 5);
 
-    int i = a;
+    int i = static_cast<int>(a);
     try {
-    float j = a;
+    float j = static_cast<float>(a);
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }

@@ -66,133 +66,133 @@ struct AnyType {
         std::copy(other.value, other.value + max_size, value);
     }
 
-    operator int() const {
+    explicit operator int() const {
         if (type != FundamentalType::int_) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<int const*>(value);
     }
 
-    operator float() const {
+    explicit operator float() const {
         if (type != FundamentalType::float_) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<float const*>(value);
     }
 
-    operator double() const {
+    explicit operator double() const {
         if (type != FundamentalType::double_) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<double const*>(value);
     }
 
-    operator bool() const {
+    explicit operator bool() const {
         if (type != FundamentalType::bool_) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<bool const*>(value);
     }
 
-    operator char() const {
+    explicit operator char() const {
         if (type != FundamentalType::signed_char) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<char const*>(value);
     }
 
-    operator unsigned char() const {
+    explicit operator unsigned char() const {
         if (type != FundamentalType::unsigned_char) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<unsigned char const*>(value);
     }
 
-    operator short int() const {
+    explicit operator short int() const {
         if (type != FundamentalType::short_int) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<short int const*>(value);
     }
 
-    operator unsigned short int() const {
+    explicit operator unsigned short int() const {
         if (type != FundamentalType::unsigned_short_int) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<unsigned short int const*>(value);
     }
 
-    operator long int() const {
+    explicit operator long int() const {
         if (type != FundamentalType::long_int) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<long int const*>(value);
     }
 
-    operator unsigned long int() const {
+    explicit operator unsigned long int() const {
         if (type != FundamentalType::unsigned_long_int) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<unsigned long int const*>(value);
     }
 
-    operator long long int() const {
+    explicit operator long long int() const {
         if (type != FundamentalType::long_long_int) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<long long int const*>(value);
     }
 
-    operator unsigned long long int() const {
+    explicit operator unsigned long long int() const {
         if (type != FundamentalType::unsigned_long_long_int) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<unsigned long long int const*>(value);
     }
 
-    operator long double() const {
+    explicit operator long double() const {
         if (type != FundamentalType::long_double) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<long double const*>(value);
     }
 
-    operator wchar_t() const {
+    explicit operator wchar_t() const {
         if (type != FundamentalType::wchar_t_) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<wchar_t const*>(value);
     }
 
-    operator char16_t() const {
+    explicit operator char16_t() const {
         if (type != FundamentalType::char16_t_) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<char16_t const*>(value);
     }
 
-    operator char32_t() const {
+    explicit operator char32_t() const {
         if (type != FundamentalType::char32_t_) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<char32_t const*>(value);
     }
 
-    operator void*() const {
+    explicit operator void*() const {
         if (type != FundamentalType::void_) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<void* const*>(value);
     }
 
-    operator std::nullptr_t() const {
+    explicit operator std::nullptr_t() const {
         if (type != FundamentalType::nullptr_t_) {
             throw std::runtime_error("Bad cast");
         }
         return *reinterpret_cast<std::nullptr_t const*>(value);
     }
 
-    operator FundamentalType() const {
+    explicit operator FundamentalType() const {
         return type;
     }
 
