@@ -91,15 +91,18 @@ void StringListReplaceInStrings(char** &list, const char* before, const char* af
     for(int i = 0; list[i] != NULL; i++){
         char* ptr = list[i];
         while((ptr = strstr(ptr, before)) != NULL){
+            int pos = ptr - list[i];
             int before_len = strlen(before);
             int after_len = strlen(after);
             int tail_len = strlen(ptr + before_len);
             char* tail = (char*)malloc(tail_len + 1);
             strcpy(tail, ptr + before_len);
             list[i] = (char*)realloc(list[i], strlen(list[i]) - before_len + after_len + 1);
+            ptr = list[i] + pos;
             strcpy(ptr, after);
             strcpy(ptr + after_len, tail);
             free(tail);
+            ptr += after_len;
         }
     }
 }

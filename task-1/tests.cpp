@@ -158,6 +158,42 @@ TEST(StringListReplaceInStrings, Test1) {
     ASSERT_STREQ(list[2], "banana");
     ASSERT_EQ(list[3], (char*) NULL);
 
+    // recursive case
+    StringListReplaceInStrings(list, "banana", "banana");
+    ASSERT_STREQ(list[0], "banana");
+    ASSERT_STREQ(list[1], "plum");
+    ASSERT_STREQ(list[2], "banana");
+    ASSERT_EQ(list[3], (char*) NULL);
+
+    StringListDestroy(list);
+}
+
+TEST(StringListReplaceInStrings, Test2) {
+    char** list;
+    StringListInit(list);
+
+    StringListAdd(list,  "apple banana apple");
+    StringListAdd(list,  "plum apple banana");
+    StringListAdd(list,  "apple apple apple");
+
+    StringListReplaceInStrings(list, "apple", "banana");
+
+    ASSERT_STREQ(list[0], "banana banana banana");
+    ASSERT_STREQ(list[1], "plum banana banana");
+    ASSERT_STREQ(list[2], "banana banana banana");
+
+    StringListReplaceInStrings(list, "banana", "apple");
+
+    ASSERT_STREQ(list[0], "apple apple apple");
+    ASSERT_STREQ(list[1], "plum apple apple");
+    ASSERT_STREQ(list[2], "apple apple apple");
+
+    StringListReplaceInStrings(list, "apple", "apple cake");
+
+    ASSERT_STREQ(list[0], "apple cake apple cake apple cake");
+    ASSERT_STREQ(list[1], "plum apple cake apple cake");
+    ASSERT_STREQ(list[2], "apple cake apple cake apple cake");
+
     StringListDestroy(list);
 }
 
