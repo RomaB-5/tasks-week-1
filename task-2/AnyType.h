@@ -58,6 +58,42 @@ struct AnyType {
         *reinterpret_cast<short int*>(value) = si;
     }
 
+    AnyType(unsigned short int usi) : type(FundamentalType::unsigned_short_int) {
+        *reinterpret_cast<unsigned short int*>(value) = usi;
+    }
+
+    AnyType(long int li) : type(FundamentalType::long_int) {
+        *reinterpret_cast<long int*>(value) = li;
+    }
+
+    AnyType(unsigned long int uli) : type(FundamentalType::unsigned_long_int) {
+        *reinterpret_cast<unsigned long int*>(value) = uli;
+    }
+
+    AnyType(long long int lli) : type(FundamentalType::long_long_int) {
+        *reinterpret_cast<long long int*>(value) = lli;
+    }
+
+    AnyType(unsigned long long int ulli) : type(FundamentalType::unsigned_long_long_int) {
+        *reinterpret_cast<unsigned long long int*>(value) = ulli;
+    }
+
+    AnyType(long double ld) : type(FundamentalType::long_double) {
+        *reinterpret_cast<long double*>(value) = ld;
+    }
+
+    AnyType(wchar_t wc) : type(FundamentalType::wchar_t_) {
+        *reinterpret_cast<wchar_t*>(value) = wc;
+    }
+
+    AnyType(char16_t c16) : type(FundamentalType::char16_t_) {
+        *reinterpret_cast<char16_t*>(value) = c16;
+    }
+
+    AnyType(char32_t c32) : type(FundamentalType::char32_t_) {
+        *reinterpret_cast<char32_t*>(value) = c32;
+    }
+    
     AnyType(AnyType const& other) : type(other.type) {
         std::copy(other.value, other.value + max_size, value);
     }
@@ -65,6 +101,8 @@ struct AnyType {
     AnyType(AnyType&& other) : type(other.type) {
         std::copy(other.value, other.value + max_size, value);
     }
+
+    ~AnyType() = default;
 
     explicit operator int() const {
         if (type != FundamentalType::int_) {
@@ -178,22 +216,129 @@ struct AnyType {
         return *reinterpret_cast<char32_t const*>(value);
     }
 
-    explicit operator void*() const {
-        if (type != FundamentalType::void_) {
-            throw std::runtime_error("Bad cast");
-        }
-        return *reinterpret_cast<void* const*>(value);
-    }
+    explicit operator void*() const = delete;
 
-    explicit operator std::nullptr_t() const {
-        if (type != FundamentalType::nullptr_t_) {
-            throw std::runtime_error("Bad cast");
-        }
-        return *reinterpret_cast<std::nullptr_t const*>(value);
-    }
+    explicit operator std::nullptr_t() const = delete;
 
     explicit operator FundamentalType() const {
         return type;
     }
 
+
+    AnyType& operator=(const AnyType& other) {
+        type = other.type;
+        std::copy(other.value, other.value + max_size, value);
+        return *this;
+    }
+
+    AnyType& operator=(AnyType&& other) {
+        type = other.type;
+        std::copy(other.value, other.value + max_size, value);
+        return *this;
+    }
+
+    AnyType& operator=(int i) {
+        type = FundamentalType::int_;
+        *reinterpret_cast<int*>(value) = i;
+        return *this;
+    }
+
+    AnyType& operator=(float f) {
+        type = FundamentalType::float_;
+        *reinterpret_cast<float*>(value) = f;
+        return *this;
+    }
+
+    AnyType& operator=(double d) {
+        type = FundamentalType::double_;
+        *reinterpret_cast<double*>(value) = d;
+        return *this;
+    }
+
+    AnyType& operator=(bool b) {
+        type = FundamentalType::bool_;
+        *reinterpret_cast<bool*>(value) = b;
+        return *this;
+    }
+
+    AnyType& operator=(char c) {
+        type = FundamentalType::signed_char;
+        *reinterpret_cast<char*>(value) = c;
+        return *this;
+    }
+
+    AnyType& operator=(unsigned char uc) {
+        type = FundamentalType::unsigned_char;
+        *reinterpret_cast<unsigned char*>(value) = uc;
+        return *this;
+    }
+
+    AnyType& operator=(short int si) {
+        type = FundamentalType::short_int;
+        *reinterpret_cast<short int*>(value) = si;
+        return *this;
+    }
+
+    AnyType& operator=(unsigned short int usi) {
+        type = FundamentalType::unsigned_short_int;
+        *reinterpret_cast<unsigned short int*>(value) = usi;
+        return *this;
+    }
+
+    AnyType& operator=(long int li) {
+        type = FundamentalType::long_int;
+        *reinterpret_cast<long int*>(value) = li;
+        return *this;
+    }
+
+    AnyType& operator=(unsigned long int uli) {
+        type = FundamentalType::unsigned_long_int;
+        *reinterpret_cast<unsigned long int*>(value) = uli;
+        return *this;
+    }
+
+    AnyType& operator=(long long int lli) {
+        type = FundamentalType::long_long_int;
+        *reinterpret_cast<long long int*>(value) = lli;
+        return *this;
+    }
+
+    AnyType& operator=(unsigned long long int ulli) {
+        type = FundamentalType::unsigned_long_long_int;
+        *reinterpret_cast<unsigned long long int*>(value) = ulli;
+        return *this;
+    }
+
+    AnyType& operator=(long double ld) {
+        type = FundamentalType::long_double;
+        *reinterpret_cast<long double*>(value) = ld;
+        return *this;
+    }
+
+    AnyType& operator=(wchar_t wc) {
+        type = FundamentalType::wchar_t_;
+        *reinterpret_cast<wchar_t*>(value) = wc;
+        return *this;
+    }
+
+    AnyType& operator=(char16_t c16) {
+        type = FundamentalType::char16_t_;
+        *reinterpret_cast<char16_t*>(value) = c16;
+        return *this;
+    }
+
+    AnyType& operator=(char32_t c32) {
+        type = FundamentalType::char32_t_;
+        *reinterpret_cast<char32_t*>(value) = c32;
+        return *this;
+    }
+
+    AnyType& operator=(void* v) = delete;
+
+    AnyType& operator=(std::nullptr_t n) = delete;
+
+    void clear() {
+        std::fill(value, value + max_size, std::byte{0});
+        type = FundamentalType::void_; // ???
+    }
 };

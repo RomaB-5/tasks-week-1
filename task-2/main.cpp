@@ -2,20 +2,20 @@
 #include <iostream>
 
 int main() {
-    AnyType a(5);
-    AnyType b(5.0f);
-    AnyType c(5.0);
-    AnyType d(true);
-    AnyType e('a');
-    AnyType f((unsigned char) 'a');
-    AnyType g((short int) 5);
+    AnyType a = 10;
+    a = 10.f;
+    a = 10.0;
+    a = true;
+    a = 'a';
+    a = true;
+    a = static_cast<wchar_t>('a');
 
-    int i = static_cast<int>(a);
-    try {
-    float j = static_cast<float>(a);
-    } catch (std::exception& e) {
-        std::cout << e.what() << std::endl;
-    }
+    std::cout << static_cast<wchar_t>(a) << std::endl;
+    a = 15.1;
+    std::cout << static_cast<double>(a) << std::endl;
 
-    return 0;
+    a.clear();
+
+    a = 10;
+    std::cout << static_cast<int>(a) << std::endl;
 }
