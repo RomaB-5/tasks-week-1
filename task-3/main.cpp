@@ -8,6 +8,7 @@ Give a reasonable representation of the results.
 */
 
 #include <iostream>
+#include <chrono>
 
 #include "Project.h"
 
@@ -20,9 +21,17 @@ int main(int argc, char* argv[])
     }
 
     std::string path = argv[1];
-    Project project(path);
-    project.PrintResults();
 
-    std::cout<<"Exited";
+    auto timer = std::chrono::high_resolution_clock::now();
+
+    try {
+        Project project(path);
+        project.PrintResults();
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what() << '\n';
+        return 1;
+    }
+    std::cout << "Elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - timer).count() << "ms\n";
 
 }
