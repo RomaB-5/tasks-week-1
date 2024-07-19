@@ -1,5 +1,5 @@
 #include <algorithm>
-enum class FundamentalType;
+enum class FundamentalType: unsigned char;
 
 class AnyType {
 public:
@@ -67,7 +67,11 @@ public:
     AnyType& operator=(void* v) = delete;
     AnyType& operator=(std::nullptr_t n) = delete;
 
-    void clear();
+    void Clear();
+
+    static void Swap(AnyType& a, AnyType& b) {
+        std::swap(a, b);
+    }
 
 private:
     static int constexpr max_size = std::max({sizeof(int), sizeof(float), sizeof(double), sizeof(bool), sizeof(char), sizeof(unsigned char), sizeof(short int), sizeof(unsigned short int), sizeof(long int), sizeof(unsigned long int), sizeof(long long int), sizeof(unsigned long long int), sizeof(long double), sizeof(wchar_t), sizeof(char16_t), sizeof(char32_t), sizeof(void*), sizeof(std::nullptr_t)});

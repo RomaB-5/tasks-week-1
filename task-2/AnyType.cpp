@@ -328,7 +328,7 @@ enum class FundamentalType: unsigned char
     }
 
 
-    void AnyType::clear() {
+    void AnyType::Clear() {
         std::fill(value, value + max_size, std::byte{0});
         type = FundamentalType::VOID;
     }
