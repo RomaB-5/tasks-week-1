@@ -20,6 +20,8 @@ public:
     AnyType(wchar_t wc);
     AnyType(char16_t c16);
     AnyType(char32_t c32);
+    AnyType(void* v) = delete;
+    AnyType(std::nullptr_t n) = delete;
     AnyType(AnyType const& other);
     AnyType(AnyType&& other);
     ~AnyType() = default;
