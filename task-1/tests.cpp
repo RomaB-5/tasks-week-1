@@ -2,7 +2,7 @@
 #include "gtest/gtest.h"
 
 TEST(StringListInit, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
     ASSERT_EQ(list[0], (char*) NULL);
 
@@ -11,7 +11,7 @@ TEST(StringListInit, Test1) {
 }
 
 TEST(StringListAdd, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     StringListAdd(list,  "apple");
@@ -30,7 +30,7 @@ TEST(StringListAdd, Test1) {
 }
 
 TEST(StringListRemove, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     StringListAdd(list,  "apple");
@@ -49,7 +49,7 @@ TEST(StringListRemove, Test1) {
 }
 
 TEST(StringListRemove, Test2) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     StringListAdd(list,  "apple");
@@ -79,7 +79,7 @@ TEST(StringListRemove, Test2) {
 }
 
 TEST(StringListDestroy, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     StringListAdd(list,  "apple");
@@ -92,7 +92,7 @@ TEST(StringListDestroy, Test1) {
 }
 
 TEST(StringListSize, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     ASSERT_EQ(StringListSize(list), 0);
@@ -108,7 +108,7 @@ TEST(StringListSize, Test1) {
 
 
 TEST(StringListIndexOf, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     StringListAdd(list,  "apple");
@@ -123,7 +123,7 @@ TEST(StringListIndexOf, Test1) {
 }
 
 TEST(StringListRemoveDuplicates, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     StringListAdd(list,  "apple");
@@ -144,7 +144,7 @@ TEST(StringListRemoveDuplicates, Test1) {
 }
 
 TEST(StringListReplaceInStrings, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     StringListAdd(list,  "apple");
@@ -169,7 +169,7 @@ TEST(StringListReplaceInStrings, Test1) {
 }
 
 TEST(StringListReplaceInStrings, Test2) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     StringListAdd(list,  "apple banana apple");
@@ -198,7 +198,7 @@ TEST(StringListReplaceInStrings, Test2) {
 }
 
 TEST(StringListSort, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     StringListAdd(list,  "apricot");
@@ -218,7 +218,7 @@ TEST(StringListSort, Test1) {
 }
 
 TEST(StressTest, Test1) {
-    char** list;
+    char** list = NULL;
     StringListInit(list);
 
     for(int i = 0; i < 10000; i++){
