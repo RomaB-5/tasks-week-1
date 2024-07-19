@@ -11,25 +11,25 @@ typedef char* String;
  *  Initializes the list to an empty list.
  *  First element* is set to NULL.
  */
-void StringListInit(char** &list);
+int StringListInit(char** &list);
 
 /**
  * void StringListDestroy(char*** list)
  * Frees all the memory allocated for the list.
  */
-void StringListDestroy(char** &list);
+int StringListDestroy(char** &list);
 
 /**
  * void StringListAdd(char** list, String str)
  * Adds a copy of the string to the list.
  */
-void StringListAdd(char** &list, const char* str);
+int StringListAdd(char** &list, const char* str);
 
 /**
  * void StringListRemove(char** list, String str)
  * Removes all occurances of str in the list
  */
-void StringListRemove(char** &list, const char* str);
+int StringListRemove(char** &list, const char* str);
 
 /**
  * int StringListSize(char** list)
@@ -48,13 +48,13 @@ int StringListIndexOf(char** &list, const char* str);
  * void StringListRemoveDuplicates(char** list)
  * Removes all duplicate strings from the list.
  */
-void StringListRemoveDuplicates(char** &list);
+int StringListRemoveDuplicates(char** &list);
 
 /**
  * void StringListReplaceInStrings(char** list, char* before, char* after)
  * Replaces all occurrences of the string before with the string after in all strings in the list.
  */
-void StringListReplaceInStrings(char** &list, const char* before, const char* after);
+int StringListReplaceInStrings(char** &list, const char* before, const char* after);
 
 /**
  * void StringListSort(char** list)
