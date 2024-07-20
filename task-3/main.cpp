@@ -9,8 +9,9 @@ Give a reasonable representation of the results.
 
 #include <iostream>
 #include <chrono>
+#include <fstream>
 
-#include "Project.h"
+#include "ProjectAnalyzer.h"
 
 int main(int argc, char* argv[])
 {
@@ -22,16 +23,23 @@ int main(int argc, char* argv[])
 
     std::string path = argv[1];
 
-    auto timer = std::chrono::high_resolution_clock::now();
-
     try {
-        Project project(path);
+        auto timer = std::chrono::high_resolution_clock::now();
+
+        ProjectAnalyzer project(path);
         project.PrintResults();
+        project.SaveResults("results.txt");
+
+        auto time_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - timer).count();
+        std::cout << "Elapsed time: " << time_elapsed << "ms\n";
+
+        std::ofstream ofs("results.txt", std::ios::app);
+        ofs << "Elapsed time: " << time_elapsed << "ms\n";
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << '\n';
         return 1;
     }
-    std::cout << "Elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - timer).count() << "ms\n";
 
+    return 0;
 }
