@@ -1,82 +1,110 @@
 #include <algorithm>
-enum class FundamentalType: unsigned char;
+#include <cstdint>
+#include <cstring>
+#include <stdexcept>
+#include <iostream>
+#include <bit>
+#include <format>
+
+template <class C>
+struct TypeIdentifier {
+    constexpr static int _id{};
+    constexpr static std::uint64_t id() {
+        return reinterpret_cast<std::uint64_t>(&_id);
+    }
+};
+
+class BadAnyTypeException: public std::exception
+{
+public:
+    BadAnyTypeException() = default;
+
+    std::string what()
+    {
+        return std::format("Bad AnyType cast. Type mismatch");
+    }
+};
+
 
 class AnyType {
 public:
 
-    AnyType(int i);
-    AnyType(float f);
-    AnyType(double d);
-    AnyType(bool b);
-    AnyType(char c);
-    AnyType(unsigned char uc);
-    AnyType(short int si);
-    AnyType(unsigned short int usi);
-    AnyType(long int li);
-    AnyType(unsigned long int uli);
-    AnyType(long long int lli);
-    AnyType(unsigned long long int ulli);
-    AnyType(long double ld);
-    AnyType(wchar_t wc);
-    AnyType(char16_t c16);
-    AnyType(char32_t c32);
-    AnyType(void* v) = delete;
-    AnyType(std::nullptr_t n) = delete;
-    AnyType(AnyType const& other);
-    AnyType(AnyType&& other);
+    AnyType() = delete;
     ~AnyType() = default;
 
-    explicit operator int() const;
-    explicit operator float() const;
-    explicit operator double() const;
-    explicit operator bool() const;
-    explicit operator char() const;
-    explicit operator unsigned char() const;
-    explicit operator short int() const;
-    explicit operator unsigned short int() const;
-    explicit operator long int() const;
-    explicit operator unsigned long int() const;
-    explicit operator long long int() const;
-    explicit operator unsigned long long int() const;
-    explicit operator long double() const;
-    explicit operator wchar_t() const;
-    explicit operator char16_t() const;
-    explicit operator char32_t() const;
-    explicit operator void*() const = delete;
-    explicit operator std::nullptr_t() const = delete;
+    AnyType(const AnyType& other) 
+    {
+    m_type_id = other.m_type_id;
+    std::memcpy(m_data, other.m_data, MAX_SIZE);
+    }
+    
+    template <class T>
+    AnyType(const T& value) 
+    {
+        StaticTypeCheck<T>();
 
-    explicit operator FundamentalType() const;
+        m_type_id = TypeIdentifier<T>::id();
+        std::memcpy(m_data, &value, sizeof(T));
+    }
+
+    template <class T>
+    explicit operator T() const 
+    {
+        if (m_type_id != TypeIdentifier<T>::id()) {
+            throw BadAnyTypeException();
+        }
+        return *reinterpret_cast<const T*>(m_data);
+    }
 
 
-    AnyType& operator=(const AnyType& other);
-    AnyType& operator=(AnyType&& other);
-    AnyType& operator=(int i);
-    AnyType& operator=(float f);
-    AnyType& operator=(double d);
-    AnyType& operator=(bool b);
-    AnyType& operator=(char c);
-    AnyType& operator=(unsigned char uc);
-    AnyType& operator=(short int si);
-    AnyType& operator=(unsigned short int usi);
-    AnyType& operator=(long int li);
-    AnyType& operator=(unsigned long int uli);
-    AnyType& operator=(long long int lli);
-    AnyType& operator=(unsigned long long int ulli);
-    AnyType& operator=(long double ld);
-    AnyType& operator=(wchar_t wc);
-    AnyType& operator=(char16_t c16);
-    AnyType& operator=(char32_t c32);
-    AnyType& operator=(void* v) = delete;
-    AnyType& operator=(std::nullptr_t n) = delete;
+    template <class T>
+    AnyType& operator=(const T& value) 
+    {
+        StaticTypeCheck<T>();
 
-    void Clear();
+        m_type_id = TypeIdentifier<T>::id();
+        std::memcpy(m_data, &value, sizeof(T));
+        return *this;
+    }
 
-    static void Swap(AnyType& a, AnyType& b) {
-        std::swap(a, b);
+    template <class T>
+    T& to() 
+    {
+        if (m_type_id != TypeIdentifier<T>::id()) {
+            throw BadAnyTypeException();
+
+        }
+        return *reinterpret_cast<T*>(m_data);
+    }
+
+    static void Swap(AnyType& a, AnyType& b) 
+    {
+        std::swap(a.m_data, b.m_data);
+        std::swap(a.m_type_id, b.m_type_id);
+    }
+
+    std::uint64_t get_type_id()
+    {
+        return m_type_id;
     }
 
 private:
-    static int constexpr max_size = std::max({sizeof(int), sizeof(float), sizeof(double), sizeof(bool), sizeof(char), sizeof(unsigned char), sizeof(short int), sizeof(unsigned short int), sizeof(long int), sizeof(unsigned long int), sizeof(long long int), sizeof(unsigned long long int), sizeof(long double), sizeof(wchar_t), sizeof(char16_t), sizeof(char32_t), sizeof(void*), sizeof(std::nullptr_t)});
-    FundamentalType type;
-    std::byte value[max_size];
+    static int constexpr MAX_SIZE = std::max({sizeof(int), sizeof(float), sizeof(double), 
+                                              sizeof(bool), sizeof(char), sizeof(unsigned char), 
+                                              sizeof(short int), sizeof(unsigned short int), 
+                                              sizeof(long int), sizeof(unsigned long int), 
+                                              sizeof(long long int), sizeof(unsigned long long int), 
+                                              sizeof(long double), sizeof(wchar_t), sizeof(char16_t), 
+                                              sizeof(char32_t), sizeof(void*), sizeof(std::nullptr_t)});
+
+    std::byte m_data[MAX_SIZE] = {};
+    std::uint64_t m_type_id = TypeIdentifier<void>::id();
+
+    template <class T>
+    inline void StaticTypeCheck() 
+    {
+    static_assert(std::is_fundamental_v<T>, "Only fundamental types (except void and nullptr_t) are supported");
+    static_assert(!std::is_same_v<T, void>, "void is not supported");
+    static_assert(!std::is_same_v<T, std::nullptr_t>, "nullptr_t is not supported");
+    }
 };
