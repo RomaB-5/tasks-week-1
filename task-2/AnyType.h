@@ -7,7 +7,7 @@
 #include <format>
 
 template <class C>
-struct TypeIdentifier {
+struct TypeID {
     constexpr static int _id{};
     constexpr static std::uint64_t id() {
         return reinterpret_cast<std::uint64_t>(&_id);
@@ -25,6 +25,8 @@ public:
     }
 };
 
+template <class T>
+concept Fundamental = std::is_fundamental_v<T> && !std::is_same_v<T, void> && !std::is_same_v<T, std::nullptr_t>;
 
 class AnyType {
 public:
@@ -38,31 +40,27 @@ public:
     std::memcpy(m_data, other.m_data, MAX_SIZE);
     }
     
-    template <class T>
+    template <Fundamental T>
     AnyType(const T& value) 
     {
-        StaticTypeCheck<T>();
-
-        m_type_id = TypeIdentifier<T>::id();
+        m_type_id = TypeID<T>::id();
         std::memcpy(m_data, &value, sizeof(T));
     }
 
     template <class T>
     explicit operator T() const 
     {
-        if (m_type_id != TypeIdentifier<T>::id()) {
+        if (m_type_id != TypeID<T>::id()) {
             throw BadAnyTypeException();
         }
         return *reinterpret_cast<const T*>(m_data);
     }
 
 
-    template <class T>
+    template <Fundamental T>
     AnyType& operator=(const T& value) 
     {
-        StaticTypeCheck<T>();
-
-        m_type_id = TypeIdentifier<T>::id();
+        m_type_id = TypeID<T>::id();
         std::memcpy(m_data, &value, sizeof(T));
         return *this;
     }
@@ -70,7 +68,7 @@ public:
     template <class T>
     T& to() 
     {
-        if (m_type_id != TypeIdentifier<T>::id()) {
+        if (m_type_id != TypeID<T>::id()) {
             throw BadAnyTypeException();
 
         }
@@ -98,13 +96,6 @@ private:
                                               sizeof(char32_t), sizeof(void*), sizeof(std::nullptr_t)});
 
     std::byte m_data[MAX_SIZE] = {};
-    std::uint64_t m_type_id = TypeIdentifier<void>::id();
+    std::uint64_t m_type_id = TypeID<void>::id();
 
-    template <class T>
-    inline void StaticTypeCheck() 
-    {
-    static_assert(std::is_fundamental_v<T>, "Only fundamental types (except void and nullptr_t) are supported");
-    static_assert(!std::is_same_v<T, void>, "void is not supported");
-    static_assert(!std::is_same_v<T, std::nullptr_t>, "nullptr_t is not supported");
-    }
 };

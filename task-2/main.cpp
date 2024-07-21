@@ -1,5 +1,11 @@
 #include "AnyType.h"
 
+struct X 
+{
+    int x = 10;
+    int y;
+};
+
 int main() {
     
     AnyType a(5);
@@ -29,7 +35,6 @@ int main() {
     AnyType y(static_cast<float>(5.0f));
     AnyType z(static_cast<double>(5.0));
 
-
     AnyType res = 1;
     try 
     {
@@ -39,6 +44,5 @@ int main() {
     {
         std::cout<<e.what()<<std::endl;
     }
-
 
 }

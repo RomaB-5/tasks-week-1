@@ -171,16 +171,16 @@ TEST(SwapTest, Basic)
     AnyType x = 10;
     AnyType y = 'a';
 
-    ASSERT_TRUE(x.get_type_id() == TypeIdentifier<int>::id());
-    ASSERT_TRUE(y.get_type_id() == TypeIdentifier<char>::id());
+    ASSERT_TRUE(x.get_type_id() == TypeID<int>::id());
+    ASSERT_TRUE(y.get_type_id() == TypeID<char>::id());
 
     ASSERT_EQ(x.to<int>(), 10);
     ASSERT_EQ(y.to<char>(), 'a');
 
     AnyType::Swap(x,y);
 
-    ASSERT_TRUE(y.get_type_id() == TypeIdentifier<int>::id());
-    ASSERT_TRUE(x.get_type_id() == TypeIdentifier<char>::id());
+    ASSERT_TRUE(y.get_type_id() == TypeID<int>::id());
+    ASSERT_TRUE(x.get_type_id() == TypeID<char>::id());
 
     ASSERT_EQ(y.to<int>(), 10);
     ASSERT_EQ(x.to<char>(), 'a');
