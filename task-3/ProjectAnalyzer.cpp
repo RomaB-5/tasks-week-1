@@ -9,26 +9,33 @@
 
 #include "ThreadPool.h"
 
-ProjectAnalyzer::ProjectAnalyzer(const std::filesystem::path& root) : m_root(root) {
+ProjectAnalyzer::ProjectAnalyzer(const std::filesystem::path& root) : m_root(root) 
+{
     ScanForFiles(m_root);
     AnalyzeFiles();
 }
 
-void ProjectAnalyzer::ScanForFiles(const std::filesystem::path& root) {
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(root)) {
-        if (entry.is_regular_file()) {
+void ProjectAnalyzer::ScanForFiles(const std::filesystem::path& root) 
+{
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(root)) 
+    {
+        if (entry.is_regular_file()) 
+        {
             if (std::find(m_extensions.begin(), m_extensions.end(), entry.path().extension()) != m_extensions.end())
+            {
                  m_files.push_back(entry.path());
+            }
         }
     }
 }
 
 
-void ProjectAnalyzer::AnalyzeFiles() {
+void ProjectAnalyzer::AnalyzeFiles() 
+{
     ThreadPool pool(std::thread::hardware_concurrency());
 
     for (const auto& file : m_files) 
-         {
+    {
         
         pool.enqueue([this, &file]() 
         {
@@ -44,9 +51,11 @@ void ProjectAnalyzer::AnalyzeFiles() {
 
 }
 
-std::tuple<uint32_t, uint32_t, uint32_t> ProjectAnalyzer::AnalyzeFile(const std::filesystem::path& file) {
+std::tuple<uint32_t, uint32_t, uint32_t> ProjectAnalyzer::AnalyzeFile(const std::filesystem::path& file) 
+{
     std::ifstream ifs(file);
-    if (!ifs.is_open()) {
+    if (!ifs.is_open()) 
+    {
         std::cerr << "Failed to open file: " << file << '\n';
         return { 0, 0, 0 };
     }
@@ -57,23 +66,35 @@ std::tuple<uint32_t, uint32_t, uint32_t> ProjectAnalyzer::AnalyzeFile(const std:
     bool is_comment = false;
     while (std::getline(ifs, line)) 
     {
-    if (line.find_first_not_of(" \t\n\v\f\r") == std::string::npos) {
-        empty_lines++;
-    } else {
-        if (line.find("/*") != std::string::npos) {
-            is_comment = true;
-            comment_lines++;
-        } else if (line.find("*/") != std::string::npos) {
-            is_comment = false;
-            comment_lines++;
-        } else if (line.find("//") != std::string::npos) {
-            comment_lines++;
-        } else if (is_comment) {
-            comment_lines++;
-        } else {
-            code_lines++;
+        if (line.find_first_not_of(" \t\n\v\f\r") == std::string::npos) 
+        {
+            empty_lines++;
+        } 
+        else 
+        {
+            if (line.find("/*") != std::string::npos) 
+            {
+                is_comment = true;
+                comment_lines++;
+            } 
+            else if (line.find("*/") != std::string::npos) 
+            {
+                is_comment = false;
+                comment_lines++;
+            } 
+            else if (line.find("//") != std::string::npos) 
+            {
+                comment_lines++;
+            } 
+            else if (is_comment) 
+            {
+                comment_lines++;
+            } 
+            else 
+            {
+                code_lines++;
+            }
         }
-    }
     }
 
     return { empty_lines, comment_lines, code_lines };

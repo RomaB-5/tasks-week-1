@@ -1,12 +1,3 @@
-/* 
-Given path/to/c-cpp/project
-
-Requirments:
-Recursivly traverse the directory and examine all files with the .c, .cpp, .h, .hpp extensions.
-For each file, count the number of empty lines, comment lines, and code lines 
-Give a reasonable representation of the results.
-*/
-
 #include <iostream>
 #include <chrono>
 #include <fstream>
