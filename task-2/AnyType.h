@@ -36,8 +36,8 @@ public:
 
     AnyType(const AnyType& other) 
     {
-    m_type_id = other.m_type_id;
-    std::memcpy(m_data, other.m_data, MAX_SIZE);
+        m_type_id = other.m_type_id;
+        std::memcpy(m_data, other.m_data, MAX_SIZE);
     }
     
     template <Fundamental T>
@@ -50,7 +50,8 @@ public:
     template <class T>
     explicit operator T() const 
     {
-        if (m_type_id != TypeID<T>::id()) {
+        if (m_type_id != TypeID<T>::id()) 
+        {
             throw BadAnyTypeException();
         }
         return *reinterpret_cast<const T*>(m_data);
@@ -68,9 +69,9 @@ public:
     template <class T>
     T& to() 
     {
-        if (m_type_id != TypeID<T>::id()) {
+        if (m_type_id != TypeID<T>::id()) 
+        {
             throw BadAnyTypeException();
-
         }
         return *reinterpret_cast<T*>(m_data);
     }
@@ -87,7 +88,7 @@ public:
     }
 
 private:
-    static int constexpr MAX_SIZE = std::max({sizeof(int), sizeof(float), sizeof(double), 
+    static std::uint8_t constexpr MAX_SIZE = std::max({sizeof(int), sizeof(float), sizeof(double), 
                                               sizeof(bool), sizeof(char), sizeof(unsigned char), 
                                               sizeof(short int), sizeof(unsigned short int), 
                                               sizeof(long int), sizeof(unsigned long int), 
