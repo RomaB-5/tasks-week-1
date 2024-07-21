@@ -6,6 +6,7 @@
 #include <memory>
 #include <concepts>
 #include <algorithm>
+#include <regex>
 
 #include "ThreadPool.h"
 
@@ -66,6 +67,7 @@ std::tuple<uint32_t, uint32_t, uint32_t> ProjectAnalyzer::AnalyzeFile(const std:
     bool is_comment = false;
     while (std::getline(ifs, line)) 
     {
+
         if (line.find_first_not_of(" \t\n\v\f\r") == std::string::npos) 
         {
             empty_lines++;
@@ -76,6 +78,13 @@ std::tuple<uint32_t, uint32_t, uint32_t> ProjectAnalyzer::AnalyzeFile(const std:
             {
                 is_comment = true;
                 comment_lines++;
+
+
+
+                if (line.find("*/") != std::string::npos)
+                {
+                    is_comment = false;
+                }
             } 
             else if (line.find("*/") != std::string::npos) 
             {
